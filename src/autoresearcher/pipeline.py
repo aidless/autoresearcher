@@ -15,6 +15,7 @@ from arx.config import AgentConfig
 
 from autoresearcher.claim import ClaimLedger
 from autoresearcher.config import offline_config
+from autoresearcher.decisions import decision_lines, write_decisions
 from autoresearcher.dryrun import OfflineComponents, offline_components
 from autoresearcher.fingerprint import environment_fingerprint, fingerprint_digest
 from autoresearcher.segments.base import ChainResult, SegmentContext, run_chain
@@ -42,6 +43,7 @@ class PipelineOutcome:
     chain: ChainResult
     fingerprint_digest: str
     records: list[dict]
+    decisions_path: Path
 
     @property
     def status(self) -> str:
@@ -110,13 +112,34 @@ def run_pipeline(cfg: RunConfig, *, components: OfflineComponents | None = None)
             ],
         },
     )
+    decisions_path = write_decisions(
+        run_dir,
+        decision_lines(ledger.rows(), _selfaudit_checks(run_dir, chain)),
+    )
     return PipelineOutcome(
         run_dir=run_dir,
         claim_ledger=ledger.path,
         chain=chain,
         fingerprint_digest=digest,
         records=ledger.as_records(),
+        decisions_path=decisions_path,
     )
+
+
+def _selfaudit_checks(run_dir: Path, chain: ChainResult) -> list[dict]:
+    """⑦'s per-check results, read from its payload when ⑦ ran.
+
+    Read from the payload rather than from the envelope's ``gate_summary`` so the
+    record carries the same detail a reader of the payload sees — including for a
+    refusal, which wrote its payload before it refused.
+    """
+    for artifact in chain.artifacts:
+        if artifact.segment_id != "selfaudit":
+            continue
+        path = run_dir / artifact.artifact_path
+        if path.is_file():
+            return list(json.loads(path.read_text(encoding="utf-8")).get("checks") or [])
+    return []
 
 
 __all__ = ["PipelineOutcome", "RunConfig", "run_pipeline"]
