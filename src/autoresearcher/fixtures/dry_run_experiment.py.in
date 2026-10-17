@@ -1,0 +1,32 @@
+# Rendered from fixtures/dry_run_experiment.py.in by autoresearcher.dryrun.
+# The seed is derived from the hypothesis text, so two different hypotheses get
+# two different datasets and a rerun of one hypothesis gets the same one.
+import json
+import random
+
+SEED = %(seed)d
+N_ITEMS = 400
+GENERATORS = %(generators)d
+AGREEMENT = 0.92
+STRONG = 0.94
+WEAK = 0.60
+
+rng = random.Random(SEED)
+truth = [rng.randint(0, 1) for _ in range(N_ITEMS)]
+votes = [
+    [int(t) if rng.random() < AGREEMENT else 1 - int(t) for t in truth]
+    for _ in range(GENERATORS)
+]
+strong = [int(t) if rng.random() < STRONG else 1 - int(t) for t in truth]
+weak = [int(t) if rng.random() < WEAK else 1 - int(t) for t in truth]
+
+print(json.dumps({
+    "votes": votes,
+    "scores": {
+        "strong": sum(a == b for a, b in zip(strong, truth)) / N_ITEMS,
+        "weak": sum(a == b for a, b in zip(weak, truth)) / N_ITEMS,
+    },
+    "judge_ids": ["g" + str(i) for i in range(GENERATORS)],
+    "contestant_ids": ["strong", "weak"],
+    "item_ids": list(range(N_ITEMS)),
+}))
