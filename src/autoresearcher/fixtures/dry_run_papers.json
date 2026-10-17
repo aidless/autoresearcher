@@ -1,0 +1,20 @@
+[
+  {
+    "title": "On the readability of leaderboard margins",
+    "authors": ["A. Author"],
+    "year": 2024,
+    "abstract": "A ranking difference is readable only if it clears the noise floor of the labels it was measured against.",
+    "url": "",
+    "doi": null,
+    "source": "fixture"
+  },
+  {
+    "title": "Judge panels as gold producers",
+    "authors": ["B. Author"],
+    "year": 2023,
+    "abstract": "A noise floor is a property of who produced the labels, not of the board.",
+    "url": "",
+    "doi": null,
+    "source": "fixture"
+  }
+]
