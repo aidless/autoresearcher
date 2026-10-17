@@ -12,11 +12,12 @@
     },
     {
       "type": "script_runs",
-      "name": "the ledger is readable and non-empty",
+      "name": "the ledger chain verifies",
       "cmd": [
         "python3",
         "-c",
-        "import json,sys; rows=[json.loads(l) for l in open('claim_ledger.jsonl') if l.strip()]; sys.exit(0 if rows else 1)"
+        "import sys; from arx.experiments.ledger import verify_ledger_file; sys.exit(0 if verify_ledger_file(sys.argv[1])['chain_valid'] else 1)",
+        "claim_ledger.jsonl"
       ],
       "cwd": ".",
       "timeout": 30
