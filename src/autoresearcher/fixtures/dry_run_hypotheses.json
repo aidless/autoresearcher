@@ -1,0 +1,23 @@
+[
+  {
+    "text": "A noise floor computed over five independent label producers bounds what a leaderboard leader can claim",
+    "rationale": "The floor is a property of the producers, so a leader inside it is not separated by the apparatus.",
+    "origin": "manual",
+    "confidence": 0.6,
+    "expected_effect_se_ratio": 0.5
+  },
+  {
+    "text": "A five-producer floor separates a strong system but not a weak one",
+    "rationale": "If the floor is meaningful, the strong system's margin clears it and the weak system's does not.",
+    "origin": "manual",
+    "confidence": 0.5,
+    "expected_effect_se_ratio": 0.5
+  },
+  {
+    "text": "Swapping the arithmetic mean for the median changes the leader when producers disagree at the margin",
+    "rationale": "Aggregation choice should matter only where the margin is inside the resolution bound.",
+    "origin": "manual",
+    "confidence": 0.4,
+    "expected_effect_se_ratio": 0.5
+  }
+]
