@@ -19,8 +19,10 @@ def test_a_dry_run_completes_every_segment_it_has(tmp_path: Path) -> None:
         "hypothesize",
         "experiment",
         "gate",
+        "writer",
+        "selfaudit",
     ]
-    assert [artifact.status.value for artifact in outcome.chain.artifacts] == ["OK"] * 5
+    assert [artifact.status.value for artifact in outcome.chain.artifacts] == ["OK"] * 7
 
 
 def test_the_run_directory_holds_the_products(tmp_path: Path) -> None:
@@ -28,8 +30,8 @@ def test_the_run_directory_holds_the_products(tmp_path: Path) -> None:
     run_pipeline(RunConfig(topic="t", run_dir=run_dir, dry_run=True))
     assert (run_dir / "claim_ledger.jsonl").exists()
     assert (run_dir / "env_fingerprint.json").exists()
-    assert len(list((run_dir / "segments").glob("*.json"))) == 5
-    assert len(list((run_dir / "artifacts").glob("*.json"))) == 5
+    assert len(list((run_dir / "segments").glob("*.json"))) == 7
+    assert len(list((run_dir / "artifacts").glob("*.json"))) == 7
     assert len(list((run_dir / "evidence").glob("experiment-*.json"))) == 3
     assert len(list(run_dir.glob("experiment-*.py"))) == 3
 

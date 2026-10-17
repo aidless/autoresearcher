@@ -24,6 +24,8 @@ from autoresearcher.segments.gate import GateSegment
 from autoresearcher.segments.hypothesize import HypothesizeSegment
 from autoresearcher.segments.issue import IssueSegment
 from autoresearcher.segments.literature import LiteratureSegment
+from autoresearcher.segments.selfaudit import SelfAuditSegment
+from autoresearcher.segments.writer import WriterSegment
 
 
 @dataclass
@@ -44,6 +46,7 @@ class PipelineOutcome:
     fingerprint_digest: str
     records: list[dict]
     decisions_path: Path
+    draft_path: Path | None
 
     @property
     def status(self) -> str:
@@ -51,7 +54,16 @@ class PipelineOutcome:
 
     @property
     def n_claims(self) -> int:
-        return sum(len(artifact.claim_ids) for artifact in self.chain.artifacts)
+        """Distinct claims this run produced.
+
+        Counted as distinct ids, not by summing the per-artifact lists: a segment
+        that only *carries* upstream claims (⑥ re-registers ⑤'s ids in its own
+        envelope) would otherwise be counted twice, and "how many claims does this
+        run make" would grow every time a segment is added after ⑤.
+        """
+        return len(
+            {claim_id for artifact in self.chain.artifacts for claim_id in artifact.claim_ids}
+        )
 
     def chain_records(self) -> list[dict]:
         """The ledger records as they were when the run finished."""
@@ -97,6 +109,11 @@ def run_pipeline(cfg: RunConfig, *, components: OfflineComponents | None = None)
             ),
             ExperimentSegment(provider=parts.provider, config=config),
             GateSegment(config=config),
+            # The draft is written from the ledger, then self-audited before the
+            # run is allowed to call itself finished. ⑦ can refuse, and when it
+            # does the chain stops — same rule as ⑤.
+            WriterSegment(),
+            SelfAuditSegment(),
         ],
         ctx,
         envelopes_dir=run_dir / "segments",
@@ -116,6 +133,7 @@ def run_pipeline(cfg: RunConfig, *, components: OfflineComponents | None = None)
         run_dir,
         decision_lines(ledger.rows(), _selfaudit_checks(run_dir, chain)),
     )
+    draft = run_dir / "draft.md"
     return PipelineOutcome(
         run_dir=run_dir,
         claim_ledger=ledger.path,
@@ -123,6 +141,7 @@ def run_pipeline(cfg: RunConfig, *, components: OfflineComponents | None = None)
         fingerprint_digest=digest,
         records=ledger.as_records(),
         decisions_path=decisions_path,
+        draft_path=draft if draft.is_file() else None,
     )
 
 

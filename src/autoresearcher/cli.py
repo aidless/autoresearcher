@@ -69,7 +69,9 @@ def _run(args: argparse.Namespace) -> int:
     )
     print(f"status   {outcome.status}")
     print(f"run      {outcome.run_dir}")
+    print(f"draft    {outcome.draft_path or '-'}")
     print(f"ledger   {outcome.claim_ledger}")
+    print(f"decisions {outcome.decisions_path}")
     print(f"claims   {outcome.n_claims}")
     print(f"stopped  {outcome.chain.stopped_at or '-'}")
     print(f"recompute it with: python3 -m autoresearcher.cli recompute {outcome.run_dir}")
@@ -110,10 +112,9 @@ def _doctor(args: argparse.Namespace) -> int:
     print(f"arx            {getattr(arx, '__version__', 'unknown')}")
     print(json.dumps(environment_fingerprint(), indent=2, sort_keys=True))
     print("capabilities")
-    print("  segments 1-5   available")
+    print("  segments 1-7   available")
     print("  dry-run        available (offline fixtures, no model, no network)")
     print("  live search    implemented, not exercised")
-    print("  segments 6-8   not built (M1)")
     return EXIT_OK
 
 

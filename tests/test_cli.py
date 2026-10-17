@@ -59,3 +59,21 @@ def test_doctor_prints_what_the_install_can_do(capsys) -> None:
     out = capsys.readouterr().out
     assert "arx" in out
     assert "dry-run" in out
+
+
+def test_run_prints_the_three_artifacts(tmp_path: Path, capsys) -> None:
+    run_dir = tmp_path / "run"
+    assert main(["run", "--dry-run", "a topic", "--out", str(run_dir)]) == 0
+    out = capsys.readouterr().out
+    assert "draft" in out
+    assert "ledger" in out
+    assert "decisions" in out
+    assert (run_dir / "draft.md").is_file()
+    assert (run_dir / "gate_decisions.jsonl").is_file()
+
+
+def test_doctor_says_segments_one_to_seven_are_available(capsys) -> None:
+    assert main(["doctor"]) == 0
+    out = capsys.readouterr().out
+    assert "segments 1-7" in out
+    assert "not built" not in out
