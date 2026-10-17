@@ -1,0 +1,25 @@
+{
+  "checks": [
+    {
+      "type": "file_exists",
+      "name": "draft present",
+      "path": "draft.md"
+    },
+    {
+      "type": "file_exists",
+      "name": "claim ledger present",
+      "path": "claim_ledger.jsonl"
+    },
+    {
+      "type": "script_runs",
+      "name": "the ledger is readable and non-empty",
+      "cmd": [
+        "python3",
+        "-c",
+        "import json,sys; rows=[json.loads(l) for l in open('claim_ledger.jsonl') if l.strip()]; sys.exit(0 if rows else 1)"
+      ],
+      "cwd": ".",
+      "timeout": 30
+    }
+  ]
+}
