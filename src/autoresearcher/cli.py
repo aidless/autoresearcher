@@ -8,6 +8,7 @@ refused on purpose (the tool working), 1 something is broken.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -16,6 +17,7 @@ from arx.experiments.ledger import verify_ledger_file
 
 from autoresearcher import __version__
 from autoresearcher.fingerprint import environment_fingerprint
+from autoresearcher.package import package_run
 from autoresearcher.pipeline import RunConfig, run_pipeline
 from autoresearcher.recompute import recompute_run
 
@@ -50,6 +52,10 @@ def _parser() -> argparse.ArgumentParser:
     recompute = sub.add_parser("recompute", help="re-derive every decision in a run from disk")
     recompute.add_argument("run_dir")
     recompute.set_defaults(handler=_recompute)
+
+    package = sub.add_parser("package", help="package a finished run into a deterministic archive")
+    package.add_argument("run_dir")
+    package.set_defaults(handler=_package)
 
     doctor = sub.add_parser("doctor", help="what this install can actually do")
     doctor.set_defaults(handler=_doctor)
@@ -105,6 +111,19 @@ def _recompute(args: argparse.Namespace) -> int:
     return EXIT_OK if report.ok else EXIT_BROKEN
 
 
+def _package(args: argparse.Namespace) -> int:
+    try:
+        archive = package_run(Path(args.run_dir))
+    except ValueError as exc:
+        # A run that is missing an artifact is not packageable. Say which, and
+        # exit 1: this is broken input, not a refusal the tool made on purpose.
+        print(f"cannot package: {exc}", file=sys.stderr)
+        return EXIT_BROKEN
+    print(f"archive  {archive}")
+    print(f"sha256   {hashlib.sha256(archive.read_bytes()).hexdigest()}")
+    return EXIT_OK
+
+
 def _doctor(args: argparse.Namespace) -> int:
     import arx
 
@@ -112,9 +131,10 @@ def _doctor(args: argparse.Namespace) -> int:
     print(f"arx            {getattr(arx, '__version__', 'unknown')}")
     print(json.dumps(environment_fingerprint(), indent=2, sort_keys=True))
     print("capabilities")
-    print("  segments 1-7   available")
+    print("  segments 1-8   available")
     print("  dry-run        available (offline fixtures, no model, no network)")
     print("  live search    implemented, not exercised")
+    print("  packaging      available (researcher package)")
     return EXIT_OK
 
 

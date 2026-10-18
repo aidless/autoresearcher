@@ -4,11 +4,10 @@ A research pipeline in which every segment's output has to clear a statistical
 gate before the next segment may read it. When a segment cannot support its
 output, the chain stops and says so — the refusal is the tool working.
 
-Status: **M1** — segments 1-7 run offline: ①→⑤ produce a hash-chained claim ledger, ⑥ writes
-`draft.md` by reading that ledger back, ⑦ self-audits the draft and may refuse. `verify-ledger`
-verifies any claim's chain. Submission packaging (⑧) and the standalone third-party verifier
-arrive later in this milestone; arx's sequential and multiplicity layers are still deliberately
-out of scope.
+Status: **M1** — segments 1-8 run offline: ①→⑤ produce a hash-chained claim ledger, ⑥ writes
+`draft.md` by reading that ledger back, ⑦ self-audits the draft and may refuse, ⑧ packages a
+finished run into a deterministic archive. `verify-ledger` verifies any claim's chain. arx's
+sequential and multiplicity layers are still deliberately out of scope.
 
 ## Install and run
 
@@ -46,12 +45,15 @@ One command produces three files, and each answers a different question:
 ```bash
 python3 -m autoresearcher.cli run --dry-run "does a noise floor bound what a leaderboard can claim" --out runs/demo
 python3 -m autoresearcher.cli verify-ledger runs/demo/claim_ledger.jsonl
+python3 -m autoresearcher.cli package runs/demo
 ```
 
 `gate_decisions.jsonl` is a projection of the run, not a second hash chain: the ledger's chain
 already commits to ⑤'s decisions. ⑦ is a second gate and it may refuse — when a declared check
 fails, or when `draft.md` cites a number the ledger never recorded, the chain stops and the run is
-not allowed to call itself finished.
+not allowed to call itself finished. `package` writes `submission.zip` and never submits: packaging
+the same run twice yields a byte-identical archive, so the archive can be checked rather than
+trusted.
 
 ## Recomputing a decision
 

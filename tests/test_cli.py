@@ -75,5 +75,23 @@ def test_run_prints_the_three_artifacts(tmp_path: Path, capsys) -> None:
 def test_doctor_says_segments_one_to_seven_are_available(capsys) -> None:
     assert main(["doctor"]) == 0
     out = capsys.readouterr().out
-    assert "segments 1-7" in out
+    assert "segments 1-8" in out
+    assert "packaging" in out
     assert "not built" not in out
+
+
+def test_package_writes_a_reproducible_archive(tmp_path: Path, capsys) -> None:
+    run_dir = tmp_path / "run"
+    main(["run", "--dry-run", "a topic", "--out", str(run_dir)])
+    assert main(["package", str(run_dir)]) == 0
+    out = capsys.readouterr().out
+    assert "submission.zip" in out
+    assert "sha256" in out
+    assert (run_dir / "submission.zip").is_file()
+
+
+def test_package_exits_nonzero_for_an_unfinished_run(tmp_path: Path) -> None:
+    run_dir = tmp_path / "run"
+    run_dir.mkdir()
+    (run_dir / "claim_ledger.jsonl").write_text("", encoding="utf-8")
+    assert main(["package", str(run_dir)]) == 1
