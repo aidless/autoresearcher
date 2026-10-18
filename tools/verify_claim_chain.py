@@ -49,8 +49,23 @@ def checks(run_dir: Path) -> list[Check]:
 
 
 def _chain_check(ledger_path: Path) -> Check:
+    """The ledger must exist, hold at least one record, and verify.
+
+    ``verify_ledger_file`` calls an absent or empty ledger a *valid* chain
+    (``chain_valid=True, n_records=0``), which is true and useless: a directory
+    with no run in it would otherwise clear this check and score 4/5. "We looked
+    and the ledger is empty" is not the same finding as "the chain is intact",
+    and a verifier that conflates them is the false green this repository exists
+    to refuse.
+    """
+    if not ledger_path.is_file():
+        return Check(CHAIN_CHECK, False, f"no {ledger_path.name} in the run directory")
     report = verify_ledger_file(ledger_path)
-    return Check(CHAIN_CHECK, bool(report["chain_valid"]), f"records={report['n_records']}")
+    n_records = int(report["n_records"])
+    detail = f"records={n_records}"
+    if not n_records:
+        detail += " (an empty ledger verifies vacuously; a run that recorded nothing is not a run)"
+    return Check(CHAIN_CHECK, bool(report["chain_valid"]) and n_records > 0, detail)
 
 
 def _claim_records(ledger_path: Path) -> list[dict]:

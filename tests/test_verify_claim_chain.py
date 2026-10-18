@@ -97,3 +97,24 @@ def test_the_summary_line_counts_five(tmp_path: Path, capsys) -> None:
     run_dir = _good_run(tmp_path)
     assert verify_claim_chain.main([str(run_dir)]) == 0
     assert "5/5" in capsys.readouterr().out
+
+
+def test_a_directory_with_no_run_cannot_pass_the_chain_check(tmp_path: Path) -> None:
+    # arx calls an absent ledger a valid *empty* chain, so without an explicit
+    # existence check a directory holding no run at all would score 4/5 — a
+    # false green of exactly the kind this tool exists to refuse.
+    empty = tmp_path / "not-a-run"
+    empty.mkdir()
+    check = verify_claim_chain.checks(empty)[0]
+    assert check.ok is False
+    assert "no claim_ledger.jsonl" in check.detail
+    assert verify_claim_chain.main([str(empty)]) == 1
+
+
+def test_a_ledger_with_no_records_cannot_pass_the_chain_check(tmp_path: Path) -> None:
+    run_dir = tmp_path / "run"
+    run_dir.mkdir()
+    (run_dir / "claim_ledger.jsonl").write_text("", encoding="utf-8")
+    check = verify_claim_chain.checks(run_dir)[0]
+    assert check.ok is False
+    assert "records=0" in check.detail
