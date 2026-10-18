@@ -72,7 +72,7 @@ def test_run_prints_the_three_artifacts(tmp_path: Path, capsys) -> None:
     assert (run_dir / "gate_decisions.jsonl").is_file()
 
 
-def test_doctor_says_segments_one_to_seven_are_available(capsys) -> None:
+def test_doctor_says_every_segment_is_available(capsys) -> None:
     assert main(["doctor"]) == 0
     out = capsys.readouterr().out
     assert "segments 1-8" in out
