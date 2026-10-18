@@ -34,3 +34,5 @@ jobs:
           test -f runs/ci/draft.md
           test -f runs/ci/claim_ledger.jsonl
           test -f runs/ci/gate_decisions.jsonl
+          python -m autoresearcher.cli package runs/ci
+          python tools/verify_claim_chain.py runs/ci
