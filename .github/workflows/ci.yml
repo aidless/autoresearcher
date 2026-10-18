@@ -31,3 +31,6 @@ jobs:
           python -m autoresearcher.cli run "does the gate hold" --dry-run --out runs/ci
           python -m autoresearcher.cli verify-ledger runs/ci/claim_ledger.jsonl
           python -m autoresearcher.cli recompute runs/ci
+          test -f runs/ci/draft.md
+          test -f runs/ci/claim_ledger.jsonl
+          test -f runs/ci/gate_decisions.jsonl
