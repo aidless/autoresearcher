@@ -65,3 +65,51 @@ re-derives every gate decision from the evidence files and the ledger, and
 compares the result field by field against what was written down. It calls the
 same `adjudicate()` the gate called, so it cannot drift from the gate — only
 from the files.
+
+## Verifying a finished run from the outside
+
+```bash
+python3 tools/verify_claim_chain.py runs/demo
+```
+
+The tool reads a run directory and nothing else — no pipeline, no network, no
+writes — and re-checks five things:
+
+| # | Check |
+|---|---|
+| 1 | the ledger exists and its hash chain verifies |
+| 2 | every claim row carries all eight claim fields |
+| 3 | every claim's evidence file hashes to what the ledger recorded |
+| 4 | every recorded gate decision re-derives from the files |
+| 5 | every number in `draft.md` is covered by a value in the ledger |
+
+Output on a complete run:
+
+```
+PASS  1. the ledger's hash chain verifies  (records=8)
+PASS  2. every claim carries all eight claim fields  (ok)
+PASS  3. every claim's evidence hashes to what the ledger recorded  (ok)
+PASS  4. every recorded gate decision re-derives from the files  (chain OK | reproduced 3/3 | mismatches 0 | unresolvable 0)
+PASS  5. every number in draft.md is covered by the ledger  (ok)
+5/5
+```
+
+It exits `0` only on `5/5`, exits `1` on anything else, and exits `2` when it is
+not given a run directory.
+
+Three things about that output are worth stating rather than leaving to be
+guessed at:
+
+- **An empty ledger is not a pass.** The tool requires the ledger to exist and to
+  hold at least one record. arx calls an absent ledger a valid *empty* chain
+  (`chain_valid=True, records=0`), which is true and useless: a directory holding
+  no run at all would otherwise clear check 1 and score `4/5`.
+- **A claim with an empty evidence hash is not a broken claim.** ⑤'s
+  `_undecidable` path records no digest, so check 3 still requires that claim's
+  evidence anchor to resolve but does not compare the file against the empty
+  string — that comparison would fail for a reason that is not a finding.
+- **A run that refused has no draft, and the tool says so.** When ⑤ refuses, the
+  chain stops before ⑥ and there is no `draft.md` by design, so check 5 fails and
+  the verdict is `4/5`. That is the pipeline working, not a broken run:
+  `researcher run` exits `2` and still writes `gate_decisions.jsonl` for exactly
+  that case.
