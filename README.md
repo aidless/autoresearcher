@@ -55,6 +55,25 @@ not allowed to call itself finished. `package` writes `submission.zip` and never
 the same run twice yields a byte-identical archive, so the archive can be checked rather than
 trusted.
 
+## 证明什么 / 不证明什么
+
+> 诚实性约束（fail-closed）：本仓证明的是**「闸门是唯一通道」的管道机制**（后段只能读前段已过闸的产物），不证明任何研究结论。
+
+**证明什么**
+
+1. **闸门是唯一通道**：后段读取前段输出的唯一方式是前段写下的 `segment_artifact` 文件；无共享可变状态、无访问邻段结果的 accessor（`src/autoresearcher/segments/base.py`）。生产者拒绝 → 后段无物可跑，而非「必须拒绝使用但有物可用」。
+2. **证据链可验证**：`claim_ledger.jsonl` 是哈希链，`verify_claim_chain.py` 只读 run 目录即可复验 5 项（链哈希、八字段、证据哈希、裁决重算、draft 数字覆盖），退出码 `0` 仅当 `5/5`（`tools/verify_claim_chain.py`）。
+3. **裁决可重算**：`recompute` 调用与闸门相同的 `adjudicate()`，从证据文件重导每个 gate 决策并与落盘逐字段比对——它只能从文件漂移，不能从闸门漂移。
+4. **打包字节确定**：`package` 两次打包同一 run 产出字节相同的 `submission.zip`，可校验而非信任。
+
+**不证明什么**
+
+1. **不证明任何研究结论**：`--dry-run` 是离线确定性演示（`src/autoresearcher/fixtures/dry_run_*.json`），它证明管道**在其输入下正确执行**，不证明「噪声底限制排行榜主张」本身。
+2. **不证明模型已接入**：当前 M1 状态是**离线**（①→⑧ 全 CPU）；arx 的 sequential 与 multiplicity 层**刻意不在范围**（README 开头已声明）。
+3. **不证明无空跑**：空 ledger 不算通过（`verify_claim_chain` 要求至少 1 条记录）——这是防「空目录 4/5」的机制，不是「有 ledger 就正确」的保证。
+4. **不证明免于伪造**：哈希链是**可感知篡改**（内容寻址），不是加密签名；若攻击者能重写整个 run 目录并重算链，外部验证无法区分（`tools/verify_claim_chain.py` 设计如此）。
+5. **不证明「拒绝」是 bug**：当 ⑤ 拒绝时管道在 ⑥ 前停止、无 `draft.md`，`verify_claim_chain` 判 `4/5` 且 `researcher run` 退出码 `2`——这是**管道在工作**，不是坏运行（README 已有说明）。
+
 ## Recomputing a decision
 
 ```bash
