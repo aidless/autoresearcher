@@ -74,6 +74,22 @@ trusted.
 4. **不证明免于伪造**：哈希链是**可感知篡改**（内容寻址），不是加密签名；若攻击者能重写整个 run 目录并重算链，外部验证无法区分（`tools/verify_claim_chain.py` 设计如此）。
 5. **不证明「拒绝」是 bug**：当 ⑤ 拒绝时管道在 ⑥ 前停止、无 `draft.md`，`verify_claim_chain` 判 `4/5` 且 `researcher run` 退出码 `2`——这是**管道在工作**，不是坏运行（README 已有说明）。
 
+## Benchmark (offline chain verification)
+
+`benchmarks/bench_verify_chain.py` runs the real `tools/verify_claim_chain.py`
+against the committed `runs/demo` run and requires a `5/5` verdict:
+
+```bash
+python benchmarks/bench_verify_chain.py   # RESULT: PASS (exit=0)
+```
+
+It verifies the hash chain (8 records), the eight claim fields, the evidence
+hashes, the gate-decision re-derivation (`reproduced 3/3, mismatches 0,
+unresolvable 0`), and that every `draft.md` number is covered by the ledger.
+This is the honest claim M1 can make: a finished run verifies from the outside
+by reading only its run directory — no model, no network, no writes. It does
+**not** claim any research conclusion (see `PREREG.md` §5).
+
 ## Recomputing a decision
 
 ```bash
