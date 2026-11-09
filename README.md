@@ -1,5 +1,7 @@
 # autoresearcher
 
+[![CI](https://github.com/aidless/autoresearcher/actions/workflows/ci.yml/badge.svg)](https://github.com/aidless/autoresearcher/actions/workflows/ci.yml)
+
 A research pipeline in which every segment's output has to clear a statistical
 gate before the next segment may read it. When a segment cannot support its
 output, the chain stops and says so — the refusal is the tool working.
