@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/aidless/autoresearcher/actions/workflows/ci.yml/badge.svg)](https://github.com/aidless/autoresearcher/actions/workflows/ci.yml)
 
+> 🗂 **仓库族谱**：「自主研究循环」主线仓是 [ai-researcher](https://github.com/aidless/ai-researcher)（证据链签字版）；本仓定位是逐段统计门禁变体（每段输出过门才能给下一段读）。
+
 A research pipeline in which every segment's output has to clear a statistical
 gate before the next segment may read it. When a segment cannot support its
 output, the chain stops and says so — the refusal is the tool working.
