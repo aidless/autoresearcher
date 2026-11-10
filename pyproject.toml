@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "Apache-2.0" }
 dependencies = [
-  "numpy>=1.26",
+  "numpy>=2.5.4",
   "arx-researcher @ git+https://github.com/aidless/arx.git@24845f207fe967866d0ebb8bd11aa212e9d7ea99",
 ]
 
