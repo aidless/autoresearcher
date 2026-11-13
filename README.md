@@ -1,5 +1,9 @@
 # autoresearcher
 
+[![CI](https://github.com/aidless/autoresearcher/actions/workflows/ci.yml/badge.svg)](https://github.com/aidless/autoresearcher/actions/workflows/ci.yml)
+
+> 🗂 **仓库族谱**：「自主研究循环」主线仓是 [ai-researcher](https://github.com/aidless/ai-researcher)（证据链签字版）；本仓定位是逐段统计门禁变体（每段输出过门才能给下一段读）。
+
 A research pipeline in which every segment's output has to clear a statistical
 gate before the next segment may read it. When a segment cannot support its
 output, the chain stops and says so — the refusal is the tool working.
@@ -148,3 +152,24 @@ guessed at:
   the verdict is `4/5`. That is the pipeline working, not a broken run:
   `researcher run` exits `2` and still writes `gate_decisions.jsonl` for exactly
   that case.
+
+## Limits and non-goals
+
+Stated from what the code does, not what it might do later:
+
+- **No model is ever consulted in this milestone.** `pipeline.run_pipeline` builds its
+  config from `offline_config` (`src/autoresearcher/config.py`), whose empty `llm_*`
+  values make arx's `build_llm` return a `NullLLM` — in `--dry-run` *and* without it.
+  The dry-run flag only switches the literature searcher and seed hypotheses between
+  fixtures and the live searcher; it never enables an LLM.
+- **Dry-run evidence is fixture evidence.** `--dry-run` reads canned papers
+  (`dry_run_papers.json`), seeded hypotheses, a synthetic leaderboard, and a template
+  experiment provider (`src/autoresearcher/dryrun.py`). It exercises the gates; it
+  measures nothing about the world and its outputs are not findings.
+- **arx's sequential and multiplicity layers are deliberately out of scope** (the
+  declared M1 boundary): this repo gates each segment's output statistically; it does
+  not implement arx's sequential-correction or multiplicity layers on top.
+- **Packaging is not submission.** `package` writes a deterministic `submission.zip`
+  and nothing ever submits it — there is no submission transport in this repository.
+- **The experiment segment runs a template experiment** (`TemplateExperimentProvider`),
+  not a user-supplied research plan; a real experiment loop is future work beyond M1.
