@@ -9,7 +9,6 @@ Does NOT consult a model or network. Exits 0 only on 5/5.
 
 Usage: python benchmarks/bench_verify_chain.py
 """
-import os
 import subprocess
 import sys
 from pathlib import Path
