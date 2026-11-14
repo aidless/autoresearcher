@@ -1,0 +1,129 @@
+{
+ "total": 20,
+ "passed": 20,
+ "failed": 0,
+ "selftest": false,
+ "failed_by_axis": {},
+ "results": [
+  {
+   "id": "ledger-001",
+   "axis": "ledger",
+   "ok": true,
+   "detail": "True"
+  },
+  {
+   "id": "ledger-002",
+   "axis": "ledger",
+   "ok": true,
+   "detail": "2"
+  },
+  {
+   "id": "ledger-003",
+   "axis": "ledger",
+   "ok": true,
+   "detail": "gate:003"
+  },
+  {
+   "id": "schema-001",
+   "axis": "schema",
+   "ok": true,
+   "detail": "raised ValueError"
+  },
+  {
+   "id": "schema-002",
+   "axis": "schema",
+   "ok": true,
+   "detail": "8"
+  },
+  {
+   "id": "audit-001",
+   "axis": "audit",
+   "ok": true,
+   "detail": "0.5,1.25"
+  },
+  {
+   "id": "audit-002",
+   "axis": "audit",
+   "ok": true,
+   "detail": "5e-05"
+  },
+  {
+   "id": "audit-003",
+   "axis": "audit",
+   "ok": true,
+   "detail": "0"
+  },
+  {
+   "id": "recompute-001",
+   "axis": "recompute",
+   "ok": true,
+   "detail": "chain OK | reproduced 3/3 | mismatches 0 | unresolvable 0"
+  },
+  {
+   "id": "recompute-002",
+   "axis": "recompute",
+   "ok": true,
+   "detail": "3"
+  },
+  {
+   "id": "package-001",
+   "axis": "package",
+   "ok": true,
+   "detail": "does a noise floor bound what a leaderboard can claim"
+  },
+  {
+   "id": "package-002",
+   "axis": "package",
+   "ok": true,
+   "detail": "raised ValueError"
+  },
+  {
+   "id": "fingerprint-001",
+   "axis": "fingerprint",
+   "ok": true,
+   "detail": "True"
+  },
+  {
+   "id": "fingerprint-002",
+   "axis": "fingerprint",
+   "ok": true,
+   "detail": "6"
+  },
+  {
+   "id": "segments-001",
+   "axis": "segments",
+   "ok": true,
+   "detail": "raised ValueError"
+  },
+  {
+   "id": "segments-002",
+   "axis": "segments",
+   "ok": true,
+   "detail": "raised ValueError"
+  },
+  {
+   "id": "decisions-001",
+   "axis": "decisions",
+   "ok": true,
+   "detail": "6"
+  },
+  {
+   "id": "decisions-002",
+   "axis": "decisions",
+   "ok": true,
+   "detail": "MARGINAL"
+  },
+  {
+   "id": "cli-001",
+   "axis": "cli",
+   "ok": true,
+   "detail": "0"
+  },
+  {
+   "id": "gate-001",
+   "axis": "gate",
+   "ok": true,
+   "detail": "UNDECIDABLE"
+  }
+ ]
+}

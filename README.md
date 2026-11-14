@@ -173,3 +173,42 @@ Stated from what the code does, not what it might do later:
   and nothing ever submits it — there is no submission transport in this repository.
 - **The experiment segment runs a template experiment** (`TemplateExperimentProvider`),
   not a user-supplied research plan; a real experiment loop is future work beyond M1.
+
+## 验收标准与复算
+
+本仓判为合格的条件是 `python3 eval/run_cases.py` 通过率必须为 100%（20/20），且 `make eval` 退出码必须为 0；任何一条失败即判为不合格。
+
+题库是 `eval/cases.jsonl`（20 条，七键 `id/axis/question/expected/mode/verify/source`）。其中 `expr` 条目的期望值是真跑出来的，不是抄文档：它会 `import` 本仓 `src/autoresearcher/` 的模块、或解析 `runs/demo/` 里已落盘的文件，改一行实现就可能让它变红——这正是这套题的意义。
+
+| axis | 条数 | 测什么 |
+|---|---|---|
+| `ledger` | 3 | `ClaimLedger` 的链校验、`accepted()` 计数、`next_claim_id()` 推导 |
+| `schema` | 2 | §3.1 八字段常量、非法 `gate_decision` 被 `ClaimRow` 拒绝 |
+| `audit` | 3 | 小数提取去重、四位小数的覆盖容差、`draft.md` 数字覆盖率 |
+| `recompute` | 2 | `recompute_run(runs/demo)` 的摘要与复现条数 |
+| `package` | 2 | `default_metadata()` 的 title 推导、绝对路径被 metadata 校验拒绝 |
+| `fingerprint` | 2 | 指纹摘要与键序无关、环境指纹键数 |
+| `segments` | 2 | REFUSED 无 reason 被拒、绝对 artifact 路径被拒 |
+| `decisions` | 2 | D4 决策行 schema、claim→决策行投影 |
+| `cli` | 1 | `verify-ledger` 在 5/5 通过时退出码为 0 |
+| `gate` | 1 | 无 pre_register 记录时 `adjudicate()` 判 `UNDECIDABLE` |
+
+三条命令：
+
+```bash
+python3 eval/run_cases.py            # 跑全部，20/20
+python3 eval/run_cases.py --selftest # 篡改首条期望，必须 19/20 变红（exit 0）
+make eval                            # pytest + 题库，退出码 0 才算过
+```
+
+复算说明：`eval/run-report.json` 是 `python3 eval/run_cases.py --save` 落盘的结果文件（`total/passed/failed/failed_by_axis/results`），重跑同一条命令即可复算——本仓没有随机源，同一棵树上 20/20 可重复。`--selftest` 把第一条 case 的 `expected` 改成不可能的值，若仍全绿说明题库是装饰；它返回 `0` 且 `passed=19` 才是有效信号（返回 `3` 表示题库没有鉴别力）。除题库之外，run 目录自身的数字由 `researcher recompute runs/demo` 复算（同一 `adjudicate()`，逐字段比对落盘）。
+
+失败归因：`run_cases.py` 不只报一个通过率，失败时按 axis 汇总，例如
+
+```
+失败归因（按 axis）：
+  ledger: 1 条 —— ledger-001
+  audit: 2 条 —— audit-001, audit-003
+```
+
+这样一次失败能直接指到「哪一层坏了」：`audit` 全红说明数字覆盖规则变了，`recompute` 红说明闸门与落盘文件漂移，`ledger` 红说明链本身被改过。定位后按 `source` 字段回到对应文件复核，不要凭通过率猜。
