@@ -4,7 +4,7 @@ Five checks, no writes, no pipeline, no network. It re-derives what it can and
 reports what it cannot; it never repairs a run, and a failure here is a fact
 about the files rather than a crash in the reporter.
 
-    python tools/verify_claim_chain.py runs/demo
+    python tools/verify_claim_chain.py golden/dry-run
 """
 
 from __future__ import annotations

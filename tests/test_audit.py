@@ -58,3 +58,14 @@ def test_a_covered_literal_is_not_uncovered() -> None:
 def test_an_uncovered_literal_is_named() -> None:
     rows = [_row({"leader_score": 0.9475})]
     assert uncovered_numbers("leader at 0.9475 but also 0.9999", rows) == ["0.9999"]
+
+
+def test_an_integer_absent_from_the_ledger_is_not_flagged() -> None:
+    """Blind spot: the coverage gate only sees decimal literals.
+
+    ``7`` is not in the metrics. The draft can still say it, and the check
+    returns no uncovered number. A decimal that is not in the ledger is named.
+    """
+    rows = [_row({"leader_score": 0.5})]
+    assert uncovered_numbers("cited 7 times and scored 0.5", rows) == []
+    assert uncovered_numbers("scored 0.9000", rows) == ["0.9000"]

@@ -8,14 +8,14 @@ version = "0.1.0"
 description = "A research pipeline in which every segment's output must clear a statistical gate before the next segment may read it."
 readme = "README.md"
 requires-python = ">=3.12"
-license = { text = "Apache-2.0" }
+license = { text = "MIT" }
 dependencies = [
   "numpy>=1.26",
   "arx-researcher @ git+https://github.com/aidless/arx.git@24845f207fe967866d0ebb8bd11aa212e9d7ea99",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "ruff>=0.5"]
+dev = ["pytest>=8.0", "pytest-cov>=7", "ruff>=0.5"]
 
 [project.scripts]
 researcher = "autoresearcher.cli:main"
@@ -29,6 +29,7 @@ packages = ["src/autoresearcher"]
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+extend-exclude = ["golden"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]

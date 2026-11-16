@@ -1,0 +1,9 @@
+{
+  "claim_ids": [
+    "gate:000",
+    "gate:001",
+    "gate:002"
+  ],
+  "n_unresolved": 1,
+  "n_verified": 2
+}

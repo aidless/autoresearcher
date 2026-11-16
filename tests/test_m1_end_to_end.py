@@ -55,7 +55,8 @@ def test_the_draft_is_labelled_by_the_decision_the_gate_recorded(tmp_path: Path)
     rows = ClaimLedger(run_dir / "claim_ledger.jsonl").rows()
     text = (run_dir / "draft.md").read_text(encoding="utf-8")
     verified, _, unresolved = text.partition("## Unresolved claims")
-    assert "## Verified findings" in verified
+    assert "## Claims the gate marked ACCEPT" in verified
+    assert "Nothing in this file is a research finding" in text
     assert "## Unresolved claims" in text
     accepted = [row for row in rows if row.gate_decision == "ACCEPT"]
     travelled = [row for row in rows if row.gate_decision != "ACCEPT"]
@@ -73,6 +74,8 @@ def test_every_number_in_the_draft_is_covered_by_the_ledger(tmp_path: Path) -> N
     run_pipeline(RunConfig(topic="does the gate hold", run_dir=run_dir, dry_run=True))
     rows = ClaimLedger(run_dir / "claim_ledger.jsonl").rows()
     assert uncovered_numbers((run_dir / "draft.md").read_text(encoding="utf-8"), rows) == []
+    evidence = json.loads((run_dir / "evidence/experiment-000.json").read_text(encoding="utf-8"))
+    assert not Path(evidence["result"]["entrypoint"]).is_absolute()
 
 
 def test_a_run_that_refuses_at_the_gate_leaves_no_draft(tmp_path: Path) -> None:

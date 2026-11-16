@@ -14,6 +14,7 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import dataclass, field
+from pathlib import Path
 
 from arx.audit.prereg import Preregistration, plan_k_max
 from arx.config import AgentConfig
@@ -113,6 +114,17 @@ class ExperimentSegment:
         evidence_ref = f"evidence/experiment-{index:03d}.json:1"
         target = ctx.run_dir / evidence_ref.rsplit(":", 1)[0]
         target.parent.mkdir(parents=True, exist_ok=True)
+        # The runner reports the path it executed. Store it relative to the run
+        # directory when it lives there: an absolute path would publish the
+        # machine that produced the snapshot. A path outside the run is kept
+        # as the runner wrote it and labeled by still being absolute.
+        recorded_entrypoint = result.entrypoint
+        try:
+            recorded_entrypoint = (
+                Path(result.entrypoint).resolve().relative_to(ctx.run_dir.resolve()).as_posix()
+            )
+        except ValueError:
+            recorded_entrypoint = str(result.entrypoint)
         target.write_text(
             json.dumps(
                 {
@@ -124,7 +136,7 @@ class ExperimentSegment:
                     # the evidence has to be rebuildable into a ``RunResult`` by
                     # ⑤, and ``to_dict`` carries preview fields instead.
                     "result": {
-                        "entrypoint": result.entrypoint,
+                        "entrypoint": recorded_entrypoint,
                         "returncode": result.returncode,
                         "stdout": result.stdout,
                         "stderr": result.stderr,

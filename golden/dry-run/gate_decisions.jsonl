@@ -1,0 +1,7 @@
+{"claim_id": "gate:000", "decision": "ACCEPT", "gate": "gate", "reasons": [], "target": "A noise floor computed over five independent label producers bounds what a leaderboard leader can claim", "verdict": "READABLE"}
+{"claim_id": "gate:001", "decision": "ACCEPT", "gate": "gate", "reasons": [], "target": "A five-producer floor separates a strong system but not a weak one", "verdict": "READABLE"}
+{"claim_id": "gate:002", "decision": "MARGINAL", "gate": "gate", "reasons": ["margin +0.0285 is inside the resolution bound 0.0357"], "target": "Swapping the arithmetic mean for the median changes the leader when producers disagree at the margin", "verdict": "MARGINAL"}
+{"claim_id": null, "decision": "PASS", "gate": "selfaudit", "reasons": [], "target": "draft present", "verdict": null}
+{"claim_id": null, "decision": "PASS", "gate": "selfaudit", "reasons": [], "target": "claim ledger present", "verdict": null}
+{"claim_id": null, "decision": "PASS", "gate": "selfaudit", "reasons": [], "target": "the ledger chain verifies", "verdict": null}
+{"claim_id": null, "decision": "PASS", "gate": "selfaudit", "reasons": [], "target": "draft numbers are covered by the ledger", "verdict": null}

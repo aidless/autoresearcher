@@ -1,0 +1,43 @@
+{
+  "artifact_path": "artifacts/gate.json",
+  "claim_ids": [
+    "gate:000",
+    "gate:001",
+    "gate:002"
+  ],
+  "gate_summary": {
+    "claims": 3,
+    "decisions": [
+      {
+        "claim_id": "gate:000",
+        "gate_decision": "ACCEPT",
+        "hypothesis": "A noise floor computed over five independent label producers bounds what a leaderboard leader can claim",
+        "index": 0,
+        "reasons": [],
+        "verdict": "READABLE"
+      },
+      {
+        "claim_id": "gate:001",
+        "gate_decision": "ACCEPT",
+        "hypothesis": "A five-producer floor separates a strong system but not a weak one",
+        "index": 1,
+        "reasons": [],
+        "verdict": "READABLE"
+      },
+      {
+        "claim_id": "gate:002",
+        "gate_decision": "MARGINAL",
+        "hypothesis": "Swapping the arithmetic mean for the median changes the leader when producers disagree at the margin",
+        "index": 2,
+        "reasons": [
+          "margin +0.0285 is inside the resolution bound 0.0357"
+        ],
+        "verdict": "MARGINAL"
+      }
+    ],
+    "n_accept": 2
+  },
+  "run_fingerprint": "cda5b7051488cccb353e5351c8c2c05bb09f383a26611032cc65b2bcafc0618a",
+  "segment_id": "gate",
+  "status": "OK"
+}
