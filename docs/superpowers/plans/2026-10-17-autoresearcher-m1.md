@@ -1,5 +1,9 @@
 # autoresearcher M1 Implementation Plan
 
+> AUTHOR-LOCAL PATHS: every `/home/liuzewen/...` string in this file is the author's machine on 2026-10-17. It is not a clone path and `make check` does not use it. Heading strings quoted below are the plan as written then; the shipped draft heading is `VERIFIED_HEADING` in `src/autoresearcher/segments/writer.py`.
+
+
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** One command produces exactly three artifacts for a run directory — `draft.md` (⑥), `claim_ledger.jsonl` (already M0's), and `gate_decisions.jsonl` (the run's decision record) — plus a deterministic `submission.zip` from ⑧ and a standalone third-party verifier that re-checks five things about a run without trusting it. `verify-ledger` stays green on the ledger the writer read from.

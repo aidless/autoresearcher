@@ -1,0 +1,17 @@
+{
+  "falsified_by": "",
+  "gate_flags": {
+    "gate_alpha": 0.05,
+    "gate_delta_declared": 0.02,
+    "gate_enabled": true,
+    "gate_power": 0.8,
+    "gate_strict": true,
+    "goodhart_threshold": 0.3,
+    "goodhart_window": 30,
+    "seed": 0,
+    "semantic_duplicate_threshold": 0.6,
+    "stall_limit": 6
+  },
+  "run_fingerprint": "cda5b7051488cccb353e5351c8c2c05bb09f383a26611032cc65b2bcafc0618a",
+  "topic": "does a noise floor bound what a leaderboard can claim"
+}

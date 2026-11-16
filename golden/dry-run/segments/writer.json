@@ -1,0 +1,17 @@
+{
+  "artifact_path": "draft.md",
+  "claim_ids": [
+    "gate:000",
+    "gate:001",
+    "gate:002"
+  ],
+  "gate_summary": {
+    "claims": 3,
+    "n_unresolved": 1,
+    "n_verified": 2,
+    "payload": "artifacts/writer.json"
+  },
+  "run_fingerprint": "cda5b7051488cccb353e5351c8c2c05bb09f383a26611032cc65b2bcafc0618a",
+  "segment_id": "writer",
+  "status": "OK"
+}

@@ -15,7 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TOOL = ROOT / "tools" / "verify_claim_chain.py"
-RUN = ROOT / "runs" / "demo"
+RUN = ROOT / "golden" / "dry-run"
 
 
 def main():
@@ -24,7 +24,7 @@ def main():
         print("  [FAIL] verify_claim_chain.py not found")
         return 1
     if not RUN.exists():
-        print("  [FAIL] runs/demo not found")
+        print("  [FAIL] golden/dry-run not found")
         return 1
     r = subprocess.run([sys.executable, str(TOOL), str(RUN)],
                        capture_output=True, text=True)

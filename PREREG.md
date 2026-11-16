@@ -3,9 +3,10 @@
 > 预注册规格：本文件声明**本仓库 M1 状态可检验的研究假设、评测方案、
 > 成功标准与明确边界**。内容全部对应仓库真实实现与真实输出
 > （`src/autoresearcher/` 的 8 段、`tools/verify_claim_chain.py`、
-> `runs/demo/claim_ledger.jsonl` 与 `draft.md` 的真实数字、
-> `tests/` 的 106 项离线测试、`pyproject.toml` + `.github/workflows/ci.yml`），
-> 不含虚构数字或未实现能力。
+> 已提交的 `golden/dry-run/` 与 `golden/refused-two-generators/`、
+> `tests/` 的离线测试、`pyproject.toml` 版本 `0.1.0`、`.github/workflows/ci.yml`）。
+> `runs/` 被 gitignore，不能当作已提交证据。数字以 `FAILURE_MODES.md` 里
+> 当次命令的输出为准，不是研究结论。
 
 ## 1. 研究问题
 
@@ -36,10 +37,10 @@
 
 ## 4. 成功标准
 
-1. `tests/` **106 项全过**（本仓已实现，离线、无 API key）。
-2. `verify_claim_chain.py runs/demo` 输出 `5/5`（records=8；
+1. `make check` 退出码为 0。2026-11-16 在 CPython 3.12.3 上，依赖已安装后 `make check` 用了 14 秒；pytest 收集到 **111** 项，行覆盖率 **96.14%**（906 条语句，35 条未覆盖，CI 地板 95%）。换一个解释器后以当次 pytest 输出为准。
+2. `verify_claim_chain.py golden/dry-run` 输出 `5/5`（records=8；
    证据哈希 ok；裁决 `reproduced 3/3 | mismatches 0 | unresolvable 0`；draft 覆盖 ok）。
-3. `recompute runs/demo` 输出 `chain OK | reproduced 3/3 | mismatches 0 | unresolvable 0`。
+3. `recompute golden/dry-run` 输出 `chain OK | reproduced 3/3 | mismatches 0 | unresolvable 0`。
 4. `package` 两次打包同一 run 字节相同（确定性归档）。
 5. 空 ledger **不算通过**（`verify_claim_chain` 要求 ≥1 条记录）——防「空目录 4/5」。
 
@@ -59,10 +60,9 @@
 
 - 复现：
   ```bash
-  python3 -m pip install -e ".[dev]"
-  python3 -m pytest tests/ -q                          # 106 passed
-  python3 -m autoresearcher.cli run --dry-run "does a noise floor bound what a leaderboard can claim" --out runs/demo
-  python3 -m autoresearcher.cli verify-ledger runs/demo/claim_ledger.jsonl
-  python3 tools/verify_claim_chain.py runs/demo         # 5/5
-  python3 -m autoresearcher.cli recompute runs/demo     # 3/3
+  python3 -m pip install -e ".[dev]"   # 需要网络一次，拉取 pyproject 里钉死的 arx commit
+  make check                                 # 安装之后离线
+  python3 tools/verify_golden.py             # 重算 golden/MANIFEST.sha256，并复导闸门
+  python3 tools/verify_claim_chain.py golden/dry-run
+  python3 -m autoresearcher.cli recompute golden/dry-run
   ```

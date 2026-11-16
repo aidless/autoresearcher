@@ -37,7 +37,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 
-def die(msg: str) -> "NoReturn":
+def die(msg: str) -> NoReturn:
     """题库自身有问题 → exit 2（与文件头文档一致；exit 1 专留给 case 失败）。"""
     print(f"[FATAL] {msg}", file=sys.stderr)
     raise SystemExit(2)

@@ -1,0 +1,31 @@
+{
+  "runs": [
+    {
+      "evidence_ref": "evidence/experiment-000.json:1",
+      "hypothesis": "A noise floor computed over five independent label producers bounds what a leaderboard leader can claim",
+      "index": 0,
+      "k_max": 7,
+      "provider": "dry-run-template",
+      "script_path": "experiment-000.py",
+      "script_sha256": "9302f117d72c783229b4f42be90c281d1b186035c7942630a3a5b137edce240c"
+    },
+    {
+      "evidence_ref": "evidence/experiment-001.json:1",
+      "hypothesis": "A five-producer floor separates a strong system but not a weak one",
+      "index": 1,
+      "k_max": 8,
+      "provider": "dry-run-template",
+      "script_path": "experiment-001.py",
+      "script_sha256": "081480c29786298a739679f7c43e521b2696b3015be6892d2050c8bf848a566c"
+    },
+    {
+      "evidence_ref": "evidence/experiment-002.json:1",
+      "hypothesis": "Swapping the arithmetic mean for the median changes the leader when producers disagree at the margin",
+      "index": 2,
+      "k_max": 9,
+      "provider": "dry-run-template",
+      "script_path": "experiment-002.py",
+      "script_sha256": "5db673f5df5a0936db7697863ea2119943f5b0f3696e7eb13beaf151e4f78a69"
+    }
+  ]
+}

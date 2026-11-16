@@ -1,0 +1,30 @@
+{
+  "checks": [
+    {
+      "detail": "draft.md",
+      "kind": "file_exists",
+      "name": "draft present",
+      "passed": true
+    },
+    {
+      "detail": "claim_ledger.jsonl",
+      "kind": "file_exists",
+      "name": "claim ledger present",
+      "passed": true
+    },
+    {
+      "detail": "exit 0",
+      "kind": "script_runs",
+      "name": "the ledger chain verifies",
+      "passed": true
+    },
+    {
+      "detail": "all numbers covered",
+      "kind": "coverage",
+      "name": "draft numbers are covered by the ledger",
+      "passed": true
+    }
+  ],
+  "config": "package-default",
+  "n_failed": 0
+}

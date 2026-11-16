@@ -1,0 +1,8 @@
+{
+  "arx_version": "0.3.0",
+  "autoresearcher_version": "0.1.0",
+  "machine": "x86_64",
+  "platform": "linux",
+  "python_implementation": "CPython",
+  "python_version": "3.12.3"
+}

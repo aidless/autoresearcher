@@ -1,0 +1,11 @@
+{
+  "artifact_path": "artifacts/hypothesize.json",
+  "claim_ids": [],
+  "gate_summary": {
+    "claims": 0,
+    "n_kept": 3
+  },
+  "run_fingerprint": "cda5b7051488cccb353e5351c8c2c05bb09f383a26611032cc65b2bcafc0618a",
+  "segment_id": "hypothesize",
+  "status": "OK"
+}

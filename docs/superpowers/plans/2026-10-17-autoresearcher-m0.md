@@ -1,5 +1,9 @@
 # autoresearcher M0 Implementation Plan
 
+> AUTHOR-LOCAL PATHS: every `/home/liuzewen/...` string in this file is the author's machine on 2026-10-17. It is not a clone path and `make check` does not use it. `/home/someone/...` in the embedded tests is a synthetic path, not an author path. The embedded `license = Apache-2.0` is this plan's old text; the shipped license is MIT (`LICENSE`, `pyproject.toml`).
+
+
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** A new package `autoresearcher` whose segments ①→⑤ run offline end to end, where the only way any segment can read an earlier segment's output is through the hash-chained `claim_ledger.jsonl`, and where `researcher recompute <run_dir>` re-derives every gate decision from the files on disk.

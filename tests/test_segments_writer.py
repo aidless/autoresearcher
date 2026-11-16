@@ -105,7 +105,8 @@ def test_accept_rows_land_under_verified_findings(tmp_path: Path) -> None:
     verified, unresolved = _sections(draft)
     assert artifact.status is SegmentStatus.OK
     assert artifact.artifact_path == "draft.md"
-    assert "## Verified findings" in verified
+    assert "## Claims the gate marked ACCEPT" in verified
+    assert "Nothing in this file is a research finding" in verified
     assert "the strong system separates" in verified
     assert "- Leader: `strong` at `0.9475`" in verified
     assert "- Noise floor: `0.9155` (loo)" in verified

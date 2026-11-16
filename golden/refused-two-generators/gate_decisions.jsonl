@@ -1,0 +1,3 @@
+{"claim_id": "gate:000", "decision": "UNDECIDABLE", "gate": "gate", "reasons": ["floor_degenerate"], "target": "A noise floor computed over five independent label producers bounds what a leaderboard leader can claim", "verdict": "UNDECIDABLE"}
+{"claim_id": "gate:001", "decision": "UNDECIDABLE", "gate": "gate", "reasons": ["floor_degenerate"], "target": "A five-producer floor separates a strong system but not a weak one", "verdict": "UNDECIDABLE"}
+{"claim_id": "gate:002", "decision": "UNDECIDABLE", "gate": "gate", "reasons": ["floor_degenerate"], "target": "Swapping the arithmetic mean for the median changes the leader when producers disagree at the margin", "verdict": "UNDECIDABLE"}

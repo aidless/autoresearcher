@@ -1,0 +1,13 @@
+{
+  "artifact_path": "artifacts/experiment.json",
+  "claim_ids": [],
+  "gate_summary": {
+    "claims": 0,
+    "n_runs": 3,
+    "n_untested": 0,
+    "note": "the experiments ran; nothing is claimed until 5 has judged them"
+  },
+  "run_fingerprint": "cda5b7051488cccb353e5351c8c2c05bb09f383a26611032cc65b2bcafc0618a",
+  "segment_id": "experiment",
+  "status": "OK"
+}

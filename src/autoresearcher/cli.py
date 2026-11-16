@@ -133,7 +133,7 @@ def _doctor(args: argparse.Namespace) -> int:
     print("capabilities")
     print("  segments 1-8   available")
     print("  dry-run        available (offline fixtures, no model, no network)")
-    print("  live search    implemented, not exercised")
+    print("  live search    implemented, not in CI (see FAILURE_MODES.md)")
     print("  packaging      available (researcher package)")
     return EXIT_OK
 

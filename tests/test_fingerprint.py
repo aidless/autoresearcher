@@ -7,6 +7,7 @@ from autoresearcher.fingerprint import environment_fingerprint, fingerprint_dige
 
 
 def test_fingerprint_records_the_versions_that_matter() -> None:
+    # Synthetic path, not an author path. The fingerprint must drop it.
     fp = environment_fingerprint(run_dir=Path("/home/someone/private/runs/demo"))
     assert fp["python_version"]
     assert fp["arx_version"]

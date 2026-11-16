@@ -15,8 +15,16 @@ from autoresearcher.artifact import SegmentArtifact, SegmentStatus
 from autoresearcher.claim import ClaimRow
 from autoresearcher.segments.base import SegmentContext, write_payload
 
-VERIFIED_HEADING = "## Verified findings"
+#: A gate label. ACCEPT is a decision on the recorded evidence file, not a
+#: finding about the world. The heading used to say "Verified findings"; that
+#: wording claimed a result the dry-run fixtures do not have.
+VERIFIED_HEADING = "## Claims the gate marked ACCEPT"
 UNRESOLVED_HEADING = "## Unresolved claims (tested, not separable)"
+DRAFT_NOTICE = (
+    "> Gate label, not a paper. A row under the ACCEPT heading is a claim whose "
+    "recorded gate decision is ACCEPT. Dry-run evidence is a fixture of synthetic "
+    "votes. Nothing in this file is a research finding or a live-model result."
+)
 DRAFT_NAME = "draft.md"
 
 
@@ -68,7 +76,7 @@ class WriterSegment:
 
 
 def render_draft(*, topic: str, verified: list[ClaimRow], unresolved: list[ClaimRow]) -> str:
-    lines = [f"# Draft: {topic}", ""]
+    lines = [f"# Draft: {topic}", "", DRAFT_NOTICE, ""]
     lines.extend([VERIFIED_HEADING, ""])
     if verified:
         for row in verified:
@@ -79,9 +87,9 @@ def render_draft(*, topic: str, verified: list[ClaimRow], unresolved: list[Claim
         [
             UNRESOLVED_HEADING,
             "",
-            "_These were run and did not clear the gate. A claim that cannot be "
-            "separated from the noise floor is a result, not a failure, and is "
-            "reproduced here rather than omitted._",
+            "_These were run and the gate did not mark them ACCEPT. They stay in the "
+            "draft so the refusal is visible. They are gate outcomes on the recorded "
+            "evidence, not scientific findings._",
             "",
         ]
     )
@@ -138,4 +146,10 @@ def _unresolved_lines(row: ClaimRow) -> list[str]:
     return out
 
 
-__all__ = ["VERIFIED_HEADING", "UNRESOLVED_HEADING", "WriterSegment", "render_draft"]
+__all__ = [
+    "DRAFT_NOTICE",
+    "VERIFIED_HEADING",
+    "UNRESOLVED_HEADING",
+    "WriterSegment",
+    "render_draft",
+]
